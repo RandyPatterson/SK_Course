@@ -20,14 +20,14 @@ namespace SK_DEV
                 .AddUserSecrets<Program>()
                 .Build();
 
-            // Retrieve settings from configuration
-            string? modelid = config["modelid"];
-            string? endpoint = config["endpoint"];
-            string? apikey = config["apikey"];
-
             // Create a kernel builder and add Azure OpenAI chat completion service
             var builder = Kernel.CreateBuilder();
-            builder.AddAzureOpenAIChatCompletion(modelid, endpoint, apikey);
+            
+            //Azure OpenAI
+            //builder.AddAzureOpenAIChatCompletion(config["modelid"], config["endpoint"], config["apikey"]);
+
+            //OpenAI
+            builder.AddOpenAIChatCompletion(config["OpenAI:modelid"], config["OpenAI:apikey"]);
 
             // Build the kernel
             Kernel kernel = builder.Build();
@@ -49,6 +49,9 @@ namespace SK_DEV
             // Create a chat history truncation reducer
             var reducer = new ChatHistoryTruncationReducer(targetCount: 10);
             // var reducer = new ChatHistorySummarizationReducer(chatCompletionService, 2, 2);
+
+            foreach (var attr in chatCompletionService.Attributes)
+                Console.WriteLine($"{attr.Key} \t\t{attr.Value}");
 
             // Control loop for user interaction
             while (true)
