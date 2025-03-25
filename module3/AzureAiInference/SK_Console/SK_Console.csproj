@@ -18,4 +18,10 @@
     <PackageReference Include="Microsoft.SemanticKernel.Connectors.AzureOpenAI" Version="1.37.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
