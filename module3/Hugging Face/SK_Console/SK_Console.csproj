@@ -17,6 +17,7 @@
     <PackageReference Include="Microsoft.SemanticKernel" Version="1.44.0" />
     <PackageReference Include="Microsoft.SemanticKernel.Connectors.AzureAIInference" Version="1.44.0-beta" />
     <PackageReference Include="Microsoft.SemanticKernel.Connectors.AzureOpenAI" Version="1.44.0" />
+    <PackageReference Include="Microsoft.SemanticKernel.Connectors.HuggingFace" Version="1.44.0-preview" />
   </ItemGroup>
 
   <ItemGroup>

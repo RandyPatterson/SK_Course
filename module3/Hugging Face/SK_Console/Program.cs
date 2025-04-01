@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.AzureAIInference;
+using Microsoft.SemanticKernel.Connectors.HuggingFace;
 
 #pragma warning disable SKEXP0001 
 #pragma warning disable SKEXP0070
@@ -21,11 +22,11 @@ namespace SK_DEV
                 .AddUserSecrets<Program>()
                 .Build();
 
-            // Create a kernel builder and add Azure OpenAI chat completion service
+            // Create a kernel builder
             var builder = Kernel.CreateBuilder();
 
-            //AI inference
-            builder.AddAzureAIInferenceChatCompletion(config["inference:modelid"], config["inference:apikey"], new Uri(config["inference:endpoint"]));
+            //Hugging Face 
+            builder.AddHuggingFaceChatCompletion(config["HuggingFace:modelid"], new Uri(config["HuggingFace:endpoint"]), config["HuggingFace:apikey"]);
 
             // Build the kernel
             Kernel kernel = builder.Build();
@@ -37,8 +38,7 @@ namespace SK_DEV
             var chatCompletionService = kernel.GetRequiredService<IChatCompletionService>();
 
             // Define settings for OpenAI prompt execution
-            AzureAIInferencePromptExecutionSettings settings = new()
-
+            HuggingFacePromptExecutionSettings settings = new()
             {
                 Temperature = 0.9f,
                 MaxTokens = 1500,
