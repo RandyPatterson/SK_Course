@@ -4,6 +4,7 @@ using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.AzureAIInference;
 using Microsoft.SemanticKernel.Connectors.HuggingFace;
+using Microsoft.SemanticKernel.Connectors.Onnx;
 
 #pragma warning disable SKEXP0001 
 #pragma warning disable SKEXP0070
@@ -22,23 +23,21 @@ namespace SK_DEV
                 .AddUserSecrets<Program>()
                 .Build();
 
-            // Create a kernel builder
-            var builder = Kernel.CreateBuilder();
-
-            //Hugging Face 
-            builder.AddHuggingFaceChatCompletion(config["HuggingFace:modelid"], new Uri(config["HuggingFace:endpoint"]), config["HuggingFace:apikey"]);
-
-            // Build the kernel
-            Kernel kernel = builder.Build();
+            /* 
+             * git clone --no-checkout https://huggingface.co/microsoft/Phi-3-mini-4k-instruct-onnx
+             * cd .\Phi-3-mini-4k-instruct-onnx\
+             * git sparse-checkout init
+             * git sparse-checkout set cpu_and_mobile\cpu-int4-rtn-block-32-acc-level-4
+             * 
+             */
+            using OnnxRuntimeGenAIChatCompletionService chatCompletionService = new(config["ONNX:modelid"], config["ONNX:modelpath"]);
 
             // Create chat history
             var history = new ChatHistory(systemMessage: "You are a friendly AI Assistant that answers in a friendly manner");
 
-            // Get reference to chat completion service
-            var chatCompletionService = kernel.GetRequiredService<IChatCompletionService>();
 
             // Define settings for OpenAI prompt execution
-            HuggingFacePromptExecutionSettings settings = new()
+            OnnxRuntimeGenAIPromptExecutionSettings settings = new()
             {
                 Temperature = 0.9f,
                 MaxTokens = 1500,
@@ -81,6 +80,7 @@ namespace SK_DEV
                 if (reduceMessages is not null)
                     history = new(reduceMessages);
             }
+
         }
     }
 }
