@@ -2,11 +2,14 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
+using Microsoft.SemanticKernel.Connectors.AzureOpenAI;
 using Microsoft.SemanticKernel.Connectors.Ollama;
+using Microsoft.SemanticKernel.Connectors.OpenAI;
 using OllamaSharp;
 
 #pragma warning disable SKEXP0001 
 #pragma warning disable SKEXP0070
+#pragma warning disable SKEXP0010
 
 namespace SK_DEV
 {
@@ -23,14 +26,15 @@ namespace SK_DEV
                 .Build();
 
 
-            var chatCompletionService = new OllamaApiClient(config["ollama:endpoint"], config["ollama:modelid"]).AsChatCompletionService();
+            //var chatCompletionService = new OllamaApiClient(config["ollama:endpoint"], config["ollama:modelid"]).AsChatCompletionService();
+            OpenAIChatCompletionService chatCompletionService = new(config["LMStudio:modelid"], new Uri(config["LMStudio:endpoint"]));
 
             // Create chat history
             var history = new ChatHistory(systemMessage: "You are a friendly AI Assistant that answers in a friendly manner");
 
 
             // Define settings for OpenAI prompt execution
-            OllamaPromptExecutionSettings settings = new()
+            AzureOpenAIPromptExecutionSettings settings = new()
             {
                 Temperature = 0.9f
             };
@@ -54,7 +58,6 @@ namespace SK_DEV
                     break;
 
                 string fullMessage = "";
-                OpenAI.Chat.ChatTokenUsage usage = null;
 
                 history.AddUserMessage(prompt);
                 // Get streaming response from chat completion service
