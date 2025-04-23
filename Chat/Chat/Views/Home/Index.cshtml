@@ -52,16 +52,18 @@
 				<pre style="max-width: 75%;">
 				`+promptInput+`</pre></div>`
 
+			formData = $('#chatForm').serialize();
+			$('#promptInput').val('');
 			var interval = addThenRotateImage();
 			scrollToBottom();
 
 			$.post({
 				url: '@Url.Action("Chat", "Home")',
-				data: $('#chatForm').serialize(),
+				data: formData,
 				success: function(response) {
 					$('#chatHistory').html(response);
 					setTimeout(scrollToBottom,100);
-					$('#promptInput').val('').focus(); // Clear the prompt and give it focus
+					$('#promptInput').focus(); // Clear the prompt and give it focus
 
 				},
 				error: function(xhr, status, error) {

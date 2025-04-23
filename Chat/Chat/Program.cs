@@ -1,6 +1,7 @@
 // dotnet add package Microsoft.SemanticKernel
 using Chat.ModelBinders;
 using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel.Connectors.OpenAI;
 
 
 namespace Chat;
@@ -25,6 +26,10 @@ public class Program
             deploymentName: builder.Configuration.GetValue<string>("AZURE_OPENAI_CHAT_DEPLOYMENT")!,
             endpoint: builder.Configuration.GetValue<string>("AZURE_OPENAI_ENDPOINT")!,
             apiKey: builder.Configuration.GetValue<string>("AZURE_OPENAI_KEY")!);
+
+        builder.Services.AddTransient<PromptExecutionSettings>( _ => new OpenAIPromptExecutionSettings {
+            Temperature = 0.75,
+        });
 
         var app = builder.Build();
 

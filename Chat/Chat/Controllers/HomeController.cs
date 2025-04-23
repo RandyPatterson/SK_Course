@@ -18,26 +18,25 @@ public class HomeController(ILogger<HomeController> logger) : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Chat([FromForm] ChatModel model, [FromServices] Kernel kernel)
+    public async Task<IActionResult> Chat(
+        [FromForm]      ChatModel model,
+        [FromServices]  Kernel kernel,
+        [FromServices]  PromptExecutionSettings promptSettings)
     {
 
         if (ModelState.IsValid)
         {
             var chatService = kernel.GetRequiredService<IChatCompletionService>();
             model.ChatHistory.AddUserMessage(model.Prompt!);
-            var response = await chatService.GetChatMessageContentsAsync(model.ChatHistory);
-            model.ChatHistory.AddRange(response);
+            var history = new ChatHistory(model.ChatHistory);
+            var response = await chatService.GetChatMessageContentAsync(history,promptSettings,kernel);
+            model.ChatHistory.Add(response);
             //reset prompt
             model.Prompt = string.Empty;
             return PartialView("ChatHistoryPartialView", model);
         }
 
         return BadRequest(ModelState);
-    }
-
-    public IActionResult Privacy()
-    {
-        return View();
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
