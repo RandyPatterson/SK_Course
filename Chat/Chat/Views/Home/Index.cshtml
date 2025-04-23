@@ -44,6 +44,14 @@
 				return;
 			}
 
+			document.getElementById('chatHistory').innerHTML += `
+				<div class="d-flex flex-row-reverse  m-1 User">
+				<img class="mb-1" src="images/user_icon.png" />
+				</div>
+				<div class="d-flex flex-row-reverse m-1 text-primary fw-bold User">
+				<pre style="max-width: 75%;">
+				`+promptInput+`</pre></div>`
+
 			var interval = addThenRotateImage();
 			scrollToBottom();
 
