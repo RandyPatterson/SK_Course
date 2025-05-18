@@ -1,5 +1,6 @@
 // dotnet add package Microsoft.SemanticKernel
 using Chat.ModelBinders;
+using Chat.Plugins;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
 
@@ -19,7 +20,9 @@ public class Program
         }).AddRazorRuntimeCompilation();
 
         //Add Semantic Kernel
-        builder.Services.AddKernel();
+        var kernelBuilder = builder.Services.AddKernel();
+
+        kernelBuilder.Plugins.AddFromType<GetDateTime>();
 
         //Add Azure OpenAI Service
         builder.Services.AddAzureOpenAIChatCompletion(
@@ -29,6 +32,7 @@ public class Program
 
         builder.Services.AddTransient<PromptExecutionSettings>( _ => new OpenAIPromptExecutionSettings {
             Temperature = 0.75,
+            FunctionChoiceBehavior = FunctionChoiceBehavior.Auto()
         });
 
         var app = builder.Build();
