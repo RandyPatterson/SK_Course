@@ -24,6 +24,7 @@ public class Program
 
         kernelBuilder.Plugins.AddFromType<GetDateTime>();
         kernelBuilder.Plugins.AddFromType<GetWeather>();
+        kernelBuilder.Plugins.AddFromType<GetGeoCoordinates>();
 
         //Add Azure OpenAI Service
         builder.Services.AddAzureOpenAIChatCompletion(
