@@ -23,6 +23,7 @@ public class Program
         var kernelBuilder = builder.Services.AddKernel();
 
         kernelBuilder.Plugins.AddFromType<GetDateTime>();
+        kernelBuilder.Plugins.AddFromType<GetWeather>();
 
         //Add Azure OpenAI Service
         builder.Services.AddAzureOpenAIChatCompletion(

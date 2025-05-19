@@ -1,12 +1,12 @@
 # For more info on HTTP files go to https://aka.ms/vs/httpfile
 
 
-GET https://api.weather.gov/points//33.018505,-80.175652
+GET https://api.weather.gov/points/32.882030,-96.781899
 User-Agent: myapplication-udemy-course
 accept: application/geo+json
 
 ###
 
-GET https://api.weather.gov/gridpoints/CHS/77,86/forecast
+GET https://api.weather.gov/gridpoints/FWD/90,109/forecast
 User-Agent: myapplication-udemy-course
 accept: application/geo+json
