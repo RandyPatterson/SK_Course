@@ -25,8 +25,10 @@ public class Program
         kernelBuilder.Plugins.AddFromType<GetDateTime>();
         kernelBuilder.Plugins.AddFromType<GetWeather>();
         kernelBuilder.Plugins.AddFromType<GetGeoCoordinates>();
+        kernelBuilder.Plugins.AddFromType<PersonalInfo>();
 
         //Add Azure OpenAI Service
+
         builder.Services.AddAzureOpenAIChatCompletion(
             deploymentName: builder.Configuration.GetValue<string>("AZURE_OPENAI_CHAT_DEPLOYMENT")!,
             endpoint: builder.Configuration.GetValue<string>("AZURE_OPENAI_ENDPOINT")!,
