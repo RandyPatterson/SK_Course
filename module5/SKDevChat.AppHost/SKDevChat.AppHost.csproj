@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Chat\Chat.csproj" />
+    <ProjectReference Include="..\Customer.API\Customer.API.csproj" />
   </ItemGroup>
 
 </Project>
