@@ -1,7 +1,6 @@
 using Customer.API.Services;
-using Scalar.AspNetCore;
+using Microsoft.OpenApi.Models;
 using System.Reflection;
-using System.IO;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
@@ -9,33 +8,38 @@ builder.AddServiceDefaults();
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
+builder.Services.AddSwaggerGen(c =>
 {
-    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
-}); // Ensure the required package is installed
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Customer API",
+        Version = "v1",
+        Description = "A simple API to manage customer data"
+    });
+
+    // Set the comments path for the Swagger JSON and UI.
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    c.IncludeXmlComments(xmlPath);
+});
 
 // Register the CustomerRepository as a singleton since it's our in-memory database
 builder.Services.AddSingleton<CustomerRepository>();
 
 var app = builder.Build();
-app.UseSwagger(options =>
+
+app.MapDefaultEndpoints();
+
+// Configure the HTTP request pipeline.
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    options.RouteTemplate = "/openapi/{documentName}.json";
-});
-app.MapScalarApiReference(options =>
-{
-    //Configure Scalar OpenAPI UI
-    options
-        .WithTitle("Customer API")
-        .WithSidebar(true)
-        .WithTheme(ScalarTheme.DeepSpace)
-        .WithDarkMode(false)
-        .WithClientButton(true);
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Customer API V1");
+    c.RoutePrefix = string.Empty; // Serve the Swagger UI at the root
 });
 
-// Redirect root to Scalar UI
-app.MapGet("/", () => Results.Redirect("/scalar/v1"));
+app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
+
 app.Run();
