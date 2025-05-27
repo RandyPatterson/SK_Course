@@ -26,9 +26,6 @@ Source code for my [Udemy Course](https://www.udemy.com/course/building-smarter-
 * Developers and Software Engineers looking to improve their AI skills by leveraging Semantic Kernel to create AI Infused Applications
 * Business Analysts and Project Managers interested in leveraging AI for  Converting Data into Actionable Insights and Optimizing Business Processes
 
-## Course Content
-
-# Building Smarter AI Apps with Semantic Kernel
 
 ## Course Content
 
