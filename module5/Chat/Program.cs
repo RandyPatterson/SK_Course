@@ -9,7 +9,7 @@ namespace Chat;
 
 public class Program
 {
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
         builder.AddServiceDefaults();
@@ -27,6 +27,14 @@ public class Program
         kernelBuilder.Plugins.AddFromType<GetGeoCoordinates>();
         kernelBuilder.Plugins.AddFromType<PersonalInfo>();
 
+        var kernel = builder.Services.BuildServiceProvider().GetRequiredService<Kernel>();
+
+        var kernelPlugin = await kernel.ImportPluginFromOpenApiAsync(
+         pluginName: "customers",
+         uri: new Uri("https://localhost:7049/swagger/v1/swagger.json")
+         );
+        builder.Services.AddSingleton(kernelPlugin);
+
         //Add Azure OpenAI Service
 
         builder.Services.AddAzureOpenAIChatCompletion(
@@ -34,9 +42,14 @@ public class Program
             endpoint: builder.Configuration.GetValue<string>("AZURE_OPENAI_ENDPOINT")!,
             apiKey: builder.Configuration.GetValue<string>("AZURE_OPENAI_KEY")!);
 
+
+        // Enable concurrent invocation of functions to get the latest news and the current time.
+        FunctionChoiceBehaviorOptions options = new() { AllowConcurrentInvocation = true };
+
+
         builder.Services.AddTransient<PromptExecutionSettings>( _ => new OpenAIPromptExecutionSettings {
             Temperature = 0.75,
-            FunctionChoiceBehavior = FunctionChoiceBehavior.Auto()
+            FunctionChoiceBehavior = FunctionChoiceBehavior.Auto(options: options)
         });
 
         var app = builder.Build();
