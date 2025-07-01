@@ -23,7 +23,7 @@ namespace Chat.Plugins
         [KernelFunction("contoso_search")]
         [Description("use to search Contoso company documents for the given query.")]
         [return:Description("returns a list of results where the Content is the data found from the search, Citation is the name of the document where the result was found and Score decimal percentage of is how confident the result matches the query ")]
-        public async Task<IList<ContosoSearchResults>> SearchAsync(string query)
+        public async Task<IList<ContosoSearchResults>> SearchAsync([Description("the original prompt optimized for a vector search. no need to include the company Contoso")] string query)
         {
             // Convert string query to vector
             var embedding = await _embeddingGenerator.GenerateAsync(query);
@@ -35,7 +35,11 @@ namespace Chat.Plugins
             VectorizedQuery vectorQuery = new(embedding.Vector);
             vectorQuery.Fields.Add("contentVector");
 
-            SearchOptions searchOptions = new() {Size=5, VectorSearch = new() { Queries = { vectorQuery } } };
+            SearchOptions searchOptions = new() 
+            { 
+                Size = 5,
+                VectorSearch = new() { Queries = { vectorQuery } }
+            };
 
             // Perform search request
             Response<SearchResults<IndexSchema>> response = await searchClient.SearchAsync<IndexSchema>(searchOptions);
@@ -44,8 +48,8 @@ namespace Chat.Plugins
             var searchResults = new List<ContosoSearchResults>();
             await foreach (SearchResult<IndexSchema> result in response.Value.GetResultsAsync())
             {
-                //skip if confidence score less than 80%
-                if (result.Score < .8)
+                // Only add results with score >= 0.8
+                if (result.Score < 0.8)
                     continue;
 
                 searchResults.Add(new ContosoSearchResults()
@@ -55,7 +59,7 @@ namespace Chat.Plugins
                     Score = result.Score
                 });
             }
-
+        
             return searchResults;
         }
 
