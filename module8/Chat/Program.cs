@@ -38,21 +38,23 @@ public class Program
             endpoint: builder.Configuration.GetValue<string>("AZURE_OPENAI_ENDPOINT")!,
             apiKey: builder.Configuration.GetValue<string>("AZURE_OPENAI_KEY")!);
 
+        //RAG: Add Text Embedding 
 
         builder.Services.AddAzureOpenAIEmbeddingGenerator(
-            deploymentName: builder.Configuration.GetValue<string>("EMBEDDING_DEPLOYNAME")!,
-            endpoint: builder.Configuration.GetValue<string>("AZURE_OPENAI_ENDPOINT")!,
-            apiKey: builder.Configuration.GetValue<string>("AZURE_OPENAI_KEY")!);
+         deploymentName: builder.Configuration.GetValue<string>("EMBEDDING_DEPLOYNAME")!,
+         endpoint: builder.Configuration.GetValue<string>("AZURE_OPENAI_ENDPOINT")!,
+         apiKey: builder.Configuration.GetValue<string>("AZURE_OPENAI_KEY")!);
 
+
+        //RAG: Add AI Search
 
         builder.Services.AddSingleton(
-            sp => new SearchIndexClient(
-                new Uri(builder.Configuration.GetValue<string>("AI_SEARCH_ENDOINT")!),
-                new AzureKeyCredential(builder.Configuration.GetValue<string>("AI_SEARCH_KEY")!)));
-        
+         sp => new SearchIndexClient(
+         new Uri(builder.Configuration.GetValue<string>("AI_SEARCH_ENDOINT")!),
+         new AzureKeyCredential(builder.Configuration.GetValue<string>("AI_SEARCH_KEY")!)));
+
         builder.Services.AddAzureAISearchVectorStore();
 
-        
         // disable concurrent invocation of functions to get the latest news and the current time
         FunctionChoiceBehaviorOptions options = new() { AllowConcurrentInvocation = false };
 

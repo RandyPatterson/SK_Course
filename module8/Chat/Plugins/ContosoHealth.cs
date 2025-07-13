@@ -22,47 +22,55 @@ namespace Chat.Plugins
 
         [KernelFunction("contoso_search")]
         [Description("use to search Contoso company documents for the given query.")]
-        [return:Description("returns a list of results where the Content is the data found from the search, Citation is the name of the document where the result was found and Score is the decimal percentage of is how confident the result matches the query ")]
+        [return: Description("returns a list of results where the Content is the data found from the search, Citation is the name of the document where the result was found and Score is the decimal percentage of is how confident the result matches the query ")]
         public async Task<IList<ContosoSearchResults>> SearchAsync([Description("the original prompt optimized for a vector search")] string query)
         {
             // Convert string query to vector
             var embedding = await _embeddingGenerator.GenerateAsync(query);
 
-            // Get client for search operations
+            // Get AI Search client for index
             SearchClient searchClient = _indexClient.GetSearchClient("benifits");
 
             // Configure request parameters
             VectorizedQuery vectorQuery = new(embedding.Vector);
-            vectorQuery.Fields.Add("contentVector");
 
-            SearchOptions searchOptions = new() 
-            { 
+           vectorQuery.Fields.Add("contentVector");
+
+
+            // Configure Search Options
+
+            SearchOptions searchOptions = new() {
                 Size = 5,
                 VectorSearch = new() { Queries = { vectorQuery } }
             };
 
+
             // Perform search request
             Response<SearchResults<IndexSchema>> response = await searchClient.SearchAsync<IndexSchema>(searchOptions);
 
-            // Collect search results
             var searchResults = new List<ContosoSearchResults>();
-            await foreach (SearchResult<IndexSchema> result in response.Value.GetResultsAsync())
+
+            //interate over AI Search result
+            await foreach (SearchResult<IndexSchema> result in response.Value.GetResultsAsync()) 
             {
+
                 // Only add results with score >= 0.8
                 if (result.Score < 0.8)
                     continue;
 
-                searchResults.Add(new ContosoSearchResults()
-                {
+
+                searchResults.Add(new ContosoSearchResults() {
                     Content = result.Document.Content,
                     Citation = result.Document.FilePath,
                     Score = result.Score
                 });
+
+
             }
-        
             return searchResults;
         }
-
+        
+        // Matches AI Search Index fields
         private sealed class IndexSchema
         {
             [JsonPropertyName("parent_id")]
