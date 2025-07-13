@@ -45,16 +45,14 @@ public class Program
             apiKey: builder.Configuration.GetValue<string>("AZURE_OPENAI_KEY")!);
 
 
-        builder.Services.AddSingleton<SearchIndexClient>(
+        builder.Services.AddSingleton(
             sp => new SearchIndexClient(
                 new Uri(builder.Configuration.GetValue<string>("AI_SEARCH_ENDOINT")!),
                 new AzureKeyCredential(builder.Configuration.GetValue<string>("AI_SEARCH_KEY")!)));
+        
         builder.Services.AddAzureAISearchVectorStore();
 
         
-
-
-
         // disable concurrent invocation of functions to get the latest news and the current time
         FunctionChoiceBehaviorOptions options = new() { AllowConcurrentInvocation = false };
 
@@ -75,7 +73,7 @@ public class Program
             // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             app.UseHsts();
         }
-
+         
         app.UseHttpsRedirection();
         app.UseStaticFiles();
 

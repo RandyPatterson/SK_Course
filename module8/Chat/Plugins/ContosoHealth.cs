@@ -22,8 +22,8 @@ namespace Chat.Plugins
 
         [KernelFunction("contoso_search")]
         [Description("use to search Contoso company documents for the given query.")]
-        [return:Description("returns a list of results where the Content is the data found from the search, Citation is the name of the document where the result was found and Score decimal percentage of is how confident the result matches the query ")]
-        public async Task<IList<ContosoSearchResults>> SearchAsync([Description("the original prompt optimized for a vector search. no need to include the company Contoso")] string query)
+        [return:Description("returns a list of results where the Content is the data found from the search, Citation is the name of the document where the result was found and Score is the decimal percentage of is how confident the result matches the query ")]
+        public async Task<IList<ContosoSearchResults>> SearchAsync([Description("the original prompt optimized for a vector search")] string query)
         {
             // Convert string query to vector
             var embedding = await _embeddingGenerator.GenerateAsync(query);
