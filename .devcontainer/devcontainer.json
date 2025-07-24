@@ -1,0 +1,114 @@
+{
+  "name": "Semantic Kernel Course Development",
+  "image": "mcr.microsoft.com/devcontainers/dotnet:1-8.0-bookworm",
+  
+  "features": {
+    "ghcr.io/devcontainers/features/dotnet:2": {
+      "version": "9.0",
+      "additionalVersions": "8.0"
+    },
+    "ghcr.io/devcontainers/features/azure-cli:1": {
+      "installBicep": true
+    },
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "lts"
+    },
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-dotnettools.csharp",
+        "ms-dotnettools.csdevkit",
+        "ms-dotnettools.vscode-dotnet-runtime",
+        "ms-vscode.vscode-json",
+        "bradlc.vscode-tailwindcss",
+        "ms-vscode.azure-account",
+        "ms-azuretools.vscode-azureresourcegroups",
+        "ms-azuretools.vscode-azureappservice",
+        "ms-dotnettools.blazorwasm-companion",
+        "GitHub.copilot",
+        "GitHub.copilot-chat",
+        "ms-vscode.powershell"
+      ],
+      "settings": {
+        "dotnet.defaultSolution": "./module2/SK_Foundation.sln",
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "files.exclude": {
+          "**/bin": true,
+          "**/obj": true
+        },
+        "omnisharp.enableRoslynAnalyzers": true,
+        "omnisharp.enableEditorConfigSupport": true,
+        "dotnet.completion.showCompletionItemsFromUnimportedNamespaces": true
+      }
+    }
+  },
+
+  "forwardPorts": [
+    5000,
+    5001,
+    7000,
+    7001,
+    8080,
+    8081,
+    15000,
+    15001,
+    18888
+  ],
+
+  "portsAttributes": {
+    "5000": {
+      "label": "HTTP Development Server",
+      "onAutoForward": "notify"
+    },
+    "5001": {
+      "label": "HTTPS Development Server", 
+      "onAutoForward": "notify"
+    },
+    "7000": {
+      "label": "Chat Application HTTP",
+      "onAutoForward": "notify"
+    },
+    "7001": {
+      "label": "Chat Application HTTPS",
+      "onAutoForward": "notify"
+    },
+    "8080": {
+      "label": "Customer API HTTP",
+      "onAutoForward": "notify"
+    },
+    "8081": {
+      "label": "Customer API HTTPS",
+      "onAutoForward": "notify"
+    },
+    "15000": {
+      "label": ".NET Aspire Dashboard HTTP",
+      "onAutoForward": "notify"
+    },
+    "15001": {
+      "label": ".NET Aspire Dashboard HTTPS",
+      "onAutoForward": "notify"
+    },
+    "18888": {
+      "label": ".NET Aspire OTLP",
+      "onAutoForward": "silent"
+    }
+  },
+
+  "postCreateCommand": "bash .devcontainer/setup.sh",
+
+  "remoteUser": "vscode",
+
+  "mounts": [
+    "source=${localEnv:HOME}/.nuget,target=/home/vscode/.nuget,type=bind,consistency=cached"
+  ],
+
+  "containerEnv": {
+    "DOTNET_CLI_TELEMETRY_OPTOUT": "1",
+    "DOTNET_NOLOGO": "1",
+    "ASPNETCORE_ENVIRONMENT": "Development"
+  }
+}
