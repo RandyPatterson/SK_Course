@@ -5,7 +5,7 @@ This repository is configured to run in GitHub Codespaces with all necessary too
 ## 🚀 Quick Start
 
 1. **Open in Codespaces**: Click the green "Code" button and select "Create codespace on main"
-2. **Wait for setup**: The environment will automatically install .NET 8.0, .NET 9.0, and all required packages
+2. **Wait for setup**: The environment will automatically install .NET 9.0 and all required packages
 3. **Configure API Keys**: Set up your OpenAI or Azure OpenAI credentials (see below)
 4. **Start coding**: All modules are ready to run!
 
@@ -33,7 +33,7 @@ dotnet user-secrets set "OpenAI:ApiKey" "your-openai-api-key" --project module2/
 - **Module 4**: Multimodal AI - Working with images and text
 - **Module 5**: Web Applications - ASP.NET Core with Semantic Kernel
 - **Module 7**: Advanced Features - Plugins and complex scenarios
-- **Module 8**: Production Applications - Real-world implementations
+- **Module 8**: RAG Applications - Retrieval-Augmented Generation with document processing
 
 ## 🏃‍♂️ Running the Projects
 
@@ -46,6 +46,10 @@ dotnet run
 ### Web Applications with .NET Aspire (Module 5, 7, 8):
 ```bash
 cd module5
+dotnet run --project SKDevChat.AppHost
+
+# Or for Module 8 (RAG functionality)
+cd module8
 dotnet run --project SKDevChat.AppHost
 ```
 
@@ -63,12 +67,12 @@ The Codespace automatically forwards these ports:
 ## 🔧 Available Tools
 
 The Codespace includes:
-- ✅ .NET 8.0 & 9.0 SDK
-- ✅ .NET Aspire workload
+- ✅ .NET 9.0 SDK (latest version)
+- ✅ .NET Aspire workload (latest - 9.3.x series)
 - ✅ Azure CLI
 - ✅ Node.js (for any frontend dependencies)
 - ✅ Git & GitHub CLI
-- ✅ VS Code extensions for C# development
+- ✅ VS Code extensions for C# and Aspire development
 
 ## 💡 Tips
 

@@ -51,7 +51,8 @@ for module in module2 module4 module5 module7 module8; do
 done
 
 # Install .NET Aspire workload (needed for modules 5, 7, 8)
-echo "🌟 Installing .NET Aspire workload..."
+echo "🌟 Installing latest .NET Aspire workload..."
+dotnet workload update
 dotnet workload install aspire
 
 # Create a sample appsettings file template if needed

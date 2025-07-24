@@ -102,6 +102,36 @@
                 "panel": "shared"
             },
             "detail": "Install .NET Aspire workload"
+        },
+        {
+            "label": "build-module8",
+            "command": "dotnet",
+            "type": "shell",
+            "args": ["build", "module8/SKDevChat.sln"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": "$msCompile",
+            "detail": "Build Module 8 - RAG Application"
+        },
+        {
+            "label": "run-module8-aspire",
+            "command": "dotnet",
+            "type": "shell",
+            "args": ["run", "--project", "module8/SKDevChat.AppHost"],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "isBackground": true,
+            "detail": "Run Module 8 with .NET Aspire (RAG)"
         }
     ]
 }
