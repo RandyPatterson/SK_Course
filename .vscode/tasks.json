@@ -1,0 +1,137 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "restore-all",
+            "command": "dotnet",
+            "type": "shell",
+            "args": ["restore"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": "$msCompile",
+            "detail": "Restore NuGet packages for all projects"
+        },
+        {
+            "label": "build-module2",
+            "command": "dotnet",
+            "type": "shell",
+            "args": ["build", "module2/SK_Foundation.sln"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": "$msCompile",
+            "detail": "Build Module 2 - Foundation"
+        },
+        {
+            "label": "run-module2-console",
+            "command": "dotnet",
+            "type": "shell",
+            "args": ["run", "--project", "module2/SK_Console"],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "detail": "Run Module 2 Console Application"
+        },
+        {
+            "label": "build-module5",
+            "command": "dotnet",
+            "type": "shell",
+            "args": ["build", "module5/SKDevChat.sln"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": "$msCompile",
+            "detail": "Build Module 5 - Chat Application"
+        },
+        {
+            "label": "run-module5-aspire",
+            "command": "dotnet",
+            "type": "shell",
+            "args": ["run", "--project", "module5/SKDevChat.AppHost"],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "isBackground": true,
+            "detail": "Run Module 5 with .NET Aspire"
+        },
+        {
+            "label": "run-module4-multimodal",
+            "command": "dotnet",
+            "type": "shell",
+            "args": ["run", "--project", "module4/ai_multimodal"],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "detail": "Run Module 4 - Multimodal AI"
+        },
+        {
+            "label": "install-aspire-workload",
+            "command": "dotnet",
+            "type": "shell",
+            "args": ["workload", "install", "aspire"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "detail": "Install .NET Aspire workload"
+        },
+        {
+            "label": "build-module8",
+            "command": "dotnet",
+            "type": "shell",
+            "args": ["build", "module8/SKDevChat.sln"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": "$msCompile",
+            "detail": "Build Module 8 - RAG Application"
+        },
+        {
+            "label": "run-module8-aspire",
+            "command": "dotnet",
+            "type": "shell",
+            "args": ["run", "--project", "module8/SKDevChat.AppHost"],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "isBackground": true,
+            "detail": "Run Module 8 with .NET Aspire (RAG)"
+        }
+    ]
+}
