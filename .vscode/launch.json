@@ -1,0 +1,64 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug Module 2 - SK Console",
+            "type": "coreclr",
+            "request": "launch",
+            "program": "${workspaceFolder}/module2/SK_Console/bin/Debug/net9.0/SK_Console.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/module2/SK_Console",
+            "console": "integratedTerminal",
+            "stopAtEntry": false,
+            "preLaunchTask": "build-module2"
+        },
+        {
+            "name": "Debug Module 4 - Multimodal AI",
+            "type": "coreclr",
+            "request": "launch",
+            "program": "${workspaceFolder}/module4/ai_multimodal/bin/Debug/net9.0/ai_multimodal.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/module4/ai_multimodal",
+            "console": "integratedTerminal",
+            "stopAtEntry": false
+        },
+        {
+            "name": "Debug Module 5 - Chat Web App",
+            "type": "coreclr",
+            "request": "launch",
+            "program": "${workspaceFolder}/module5/Chat/bin/Debug/net9.0/Chat.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/module5/Chat",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/module5/Chat/Views"
+            }
+        },
+        {
+            "name": "Debug Module 8 - RAG Chat Web App",
+            "type": "coreclr",
+            "request": "launch",
+            "program": "${workspaceFolder}/module8/Chat/bin/Debug/net9.0/Chat.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/module8/Chat",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/module8/Chat/Views"
+            }
+        }
+    ]
+}
