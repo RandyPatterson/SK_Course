@@ -1,0 +1,46 @@
+﻿@using Microsoft.SemanticKernel.ChatCompletion
+@model Chat.Models.ChatModel
+@for (int i = 0; i < Model.ChatHistory.Count; i++)
+{
+
+
+	@if (Model.ChatHistory[i].Role == AuthorRole.User)
+	{
+		<div class="d-flex flex-row-reverse  m-1 @Model.ChatHistory[i].Role">
+			<img class="mb-1" src="images/user_icon.png" />
+		</div>
+        <div class="d-flex flex-row-reverse m-1 text-primary fw-bold @Model.ChatHistory[i].Role">
+			<pre style="max-width: 75%;">
+                @Model.ChatHistory[i].Content
+            </pre>
+        </div>
+	}
+	else if (Model.ChatHistory[i].Role == AuthorRole.Assistant)
+	{
+		<div class="row m-1 align-items-start  @Model.ChatHistory[i].Role">
+			<div class="col-10 col-auto">
+				<pre class="p-2 m-0 text-wrap">
+					<md-block>
+						<img src="images/ai_icon.png" /> 
+						<br />
+						<br />
+						@Model.ChatHistory[i].Content
+					</md-block>
+				</pre>
+			</div>
+		</div>
+	}
+	else
+	{
+		<div class="row @Model.ChatHistory[i].Role">
+			<div class="d-none">
+				@Model.ChatHistory[i].Content
+			</div>
+		</div>
+	}
+
+	<span class="d-none">
+		<input type="hidden" asp-for="@Model.ChatHistory[i].Role" value="@Model.ChatHistory[i].Role" />
+		<input type="hidden" asp-for="@Model.ChatHistory[i].Content" value="@Model.ChatHistory[i].Content" />
+	</span>
+}

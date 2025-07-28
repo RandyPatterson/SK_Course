@@ -1,0 +1,13 @@
+﻿div.system {
+    display: none !important;
+}
+
+.history {
+    overflow-y: scroll;
+    overflow: auto;
+    scroll-behavior: smooth; /* Add this line for smooth scrolling */
+}
+
+pre {
+    margin-bottom: 1px;
+}
