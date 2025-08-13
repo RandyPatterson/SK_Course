@@ -4,14 +4,15 @@
 }
 
 <link rel="stylesheet" href="~/css/chat.css" asp-append-version="true" />
-
+<style>
+	@Html.Raw(ViewData["CustomCSS"])
+</style>
 
 <div class="text-center">
 	<h1 class="display-5 fw-light">@ViewData["Title"]</h1>
 </div>
 
 <form id="chatForm" method="post">
-
 	<div id="chatHistory" style="height: 65vh" class="history container border shadow rounded m-2 p-2">
 		@await Html.PartialAsync("ChatHistoryPartialView", Model)
 	</div>
@@ -29,10 +30,9 @@
 			</div>
 		</div>
 	</div>
-	<div>
-	</div>
 </form>
 
+<div class="no-drop-indicator"></div>
 
 @section Scripts {
 	<script>
@@ -63,8 +63,7 @@
 				success: function(response) {
 					$('#chatHistory').html(response);
 					setTimeout(scrollToBottom,100);
-					$('#promptInput').focus(); // Clear the prompt and give it focus
-
+					$('#promptInput').focus();
 				},
 				error: function(xhr, status, error) {
 					clearInterval(imageRotation);
@@ -75,7 +74,6 @@
 					$('#promptInput').focus();
 				}
 			}).always(function() {
-				// Code to run after the post finishes, regardless of success or failure
 				clearInterval(interval);
 			});
 		}
@@ -87,7 +85,7 @@
 
 		function addThenRotateImage() {
 			let messageContainer = document.getElementById('chatHistory');
-			imageId = Math.random().toString(36).substring(2, 10);  //generate a random image id
+			imageId = Math.random().toString(36).substring(2, 10);
 			messageContainer.innerHTML += `<div class="p-2"><img id="${imageId}" src="images/ai_icon.png"/></div>`;
 			var interval = setInterval(function () {
 					rotateImage(imageId);
@@ -95,26 +93,112 @@
 			return interval;
 		}
 
-
 		function rotateImage(imageId) {
 			var img = document.getElementById(imageId);
-			// Get the current rotation value of the image, if it exists, or set it to 0
 			if(img) {
 				let rotation = parseInt(img.style.transform.replace(/[^0-9]/g, '')) || 0;
-				// Calculate the new rotation value by adding 10 degrees and taking the modulo 360
 				rotation = (rotation + 10) % 360;
-				// Apply the new rotation value to the image
 				img.style.transform = 'rotate(' + rotation + 'deg)';
 			}
 		}
 
+		function handleDrop(e) {
+			e.preventDefault();
+			e.stopPropagation();
+			hideNoDropIndicator();
+
+			const files = e.dataTransfer.files;
+			if (files.length > 0) {
+				uploadFile(files[0]);
+			}
+		}
+
+		function uploadFile(file) {
+			const formData = new FormData();
+			formData.append('file', file);
+
+			$.ajax({
+				url: '@Url.Action("UploadFile", "Home")',
+				type: 'POST',
+				data: formData,
+				processData: false,
+				contentType: false,
+				success: function(response) {
+					if (response.success) {
+						const fileName = response.fileName;
+						$('#promptInput').val(`Uploaded file: ${fileName}`);
+						submitChatForm();
+					} else {
+						alert('Error uploading file: ' + response.message);
+					}
+				},
+				error: function(xhr, status, error) {
+					alert('Error uploading file');
+				}
+			});
+		}
+
+		function updateNoDropIndicator(e) {
+			const indicator = document.querySelector('.no-drop-indicator');
+			indicator.style.display = 'block';
+			indicator.style.left = (e.clientX - 16) + 'px';
+			indicator.style.top = (e.clientY - 16) + 'px';
+		}
+
+		function hideNoDropIndicator() {
+			const indicator = document.querySelector('.no-drop-indicator');
+			indicator.style.display = 'none';
+		}
+
 		$(document).ready(function() {
-			$('#promptInput').focus(); // Set focus to the textarea when the page loads
+			$('#promptInput').focus();
+			
 			$('#promptInput').keydown(function(event) {
 				if (event.ctrlKey && event.key === 'Enter') {
 					submitChatForm();
 				}
 			});
+
+			// Handle file drag events on document
+			$(document).on('dragover', function(e) {
+				e.preventDefault();
+				e.stopPropagation();
+				updateNoDropIndicator(e);
+			});
+
+			$(document).on('dragleave', function(e) {
+				e.preventDefault();
+				e.stopPropagation();
+				// Only hide if we're not entering another element
+				if (!e.relatedTarget) {
+					hideNoDropIndicator();
+				}
+			});
+
+			$(document).on('drop', function(e) {
+				e.preventDefault();
+				e.stopPropagation();
+				hideNoDropIndicator();
+			});
+
+			// Handle drag events on promptInput
+			const promptInput = document.getElementById('promptInput');
+			promptInput.addEventListener('dragover', function(e) {
+				e.preventDefault();
+				e.stopPropagation();
+				hideNoDropIndicator();
+				$(this).addClass('drag-over');
+			});
+
+			promptInput.addEventListener('dragleave', function(e) {
+				e.preventDefault();
+				e.stopPropagation();
+				$(this).removeClass('drag-over');
+				// Show no-drop indicator again when leaving textarea
+				updateNoDropIndicator(e);
+			});
+
+			promptInput.addEventListener('drop', handleDrop);
 		});
 	</script>
 }
