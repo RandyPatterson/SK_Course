@@ -83,7 +83,7 @@ public class Program
     private static async Task  AddFileSystemMcpServer(IKernelBuilder kernelBuilder )
     {
         // Create an MCPClient for the GitHub server
-        IMcpClient mcpClient = await McpClientFactory.CreateAsync(new StdioClientTransport(new()
+        var mcpClient = await McpClient.CreateAsync(new StdioClientTransport(new()
         {
             Name = "FileSystem",
             Command = "npx",
@@ -106,7 +106,7 @@ public class Program
     private static async Task AddGitHubMcpServer(IKernelBuilder kernelBuilder, string github_apikey)
     {
         // Create an MCPClient for the GitHub server
-        IMcpClient mcpClient = await McpClientFactory.CreateAsync(new SseClientTransport(new()
+        var mcpClient = await McpClient.CreateAsync(new HttpClientTransport(new()
         {
             Name = "GitHub",
             Endpoint = new Uri("https://api.githubcopilot.com/mcp/"),
