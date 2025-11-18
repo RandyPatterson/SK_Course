@@ -74,12 +74,24 @@ public class Program
         app.Run();
     }
 
-    /// <summary>
-    /// Add Local MCP Server
-    /// See: https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem
-    /// </summary>
-    /// <param name="kernelBuilder"></param>
-    /// <returns></returns>
+    private static async Task AddGitHubMcpServer(IKernelBuilder kernelBuilder, string github_pat)
+    {
+        // Create an MCPClient for the GitHub server
+        var mcpClient = await McpClient.CreateAsync(new HttpClientTransport(new() {
+            Name = "Github",
+            Endpoint = new Uri("https://api.githubcopilot.com/mcp/"),
+            AdditionalHeaders = new Dictionary<string, string> {
+                ["Authorization"] = $"Bearer {github_pat}"
+            }
+        }));
+
+        // Retrieve the list of tools available on the GitHub server
+        var tools = await mcpClient.ListToolsAsync();
+        kernelBuilder.Plugins.AddFromFunctions("GH", tools.Select(skFunction => skFunction.AsKernelFunction()));
+
+    }
+
+
     private static async Task  AddFileSystemMcpServer(IKernelBuilder kernelBuilder )
     {
         // Create an MCPClient for the GitHub server
@@ -96,28 +108,4 @@ public class Program
     }
 
 
-    /// <summary>
-    /// Add Remote Github MCP Server
-    /// See: https://docs.github.com/en/copilot/how-tos/context/model-context-protocol/using-the-github-mcp-server#remote-mcp-server-configuration-with-oauth
-    /// </summary>
-    /// <param name="kernelBuilder"></param>
-    /// <param name="github_apikey"></param>
-    /// <returns></returns>
-    private static async Task AddGitHubMcpServer(IKernelBuilder kernelBuilder, string github_apikey)
-    {
-        // Create an MCPClient for the GitHub server
-        var mcpClient = await McpClient.CreateAsync(new HttpClientTransport(new()
-        {
-            Name = "GitHub",
-            Endpoint = new Uri("https://api.githubcopilot.com/mcp/"),
-            AdditionalHeaders = new Dictionary<string, string>
-            {
-                ["Authorization"] = $"Bearer {github_apikey}"
-            }
-        }));
-
-        // Retrieve the list of tools available on the GitHub server
-        var tools = await mcpClient.ListToolsAsync();
-        kernelBuilder.Plugins.AddFromFunctions("GH", tools.Select(skFunction => skFunction.AsKernelFunction()));
-    }
 }
