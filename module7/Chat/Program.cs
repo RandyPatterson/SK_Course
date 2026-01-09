@@ -99,7 +99,7 @@ public class Program
         {
             Name = "FileSystem",
             Command = "npx",
-            Arguments = ["-y", "@modelcontextprotocol/server-filesystem", "D:\\udemy\\module7\\Chat\\data\\"],
+            Arguments = ["-y", "@modelcontextprotocol/server-filesystem", "D:\\SK_Course\\module7\\Chat\\data"],
         }));
 
         // Retrieve the list of tools available on the GitHub server
